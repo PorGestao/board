@@ -147,11 +147,17 @@
   });
 
   // ---------- primeiros passos ----------
-  var passos = C.primeirosPassos || [];
+  var PP = C.primeirosPassos || [];
+  if (Array.isArray(PP)) PP = { itens: PP };   // formato antigo: só a lista
+  var passos = PP.itens || [];
   var blocoN = 1;
   if (passos.length) {
     $("passos-bloco").hidden = false;
     blocoN = 2;
+    $("passos-rotulo").innerHTML = "01 · " + txt(PP.rotulo || "Para quem chegou");
+    $("passos-titulo").innerHTML = txt(PP.titulo || "Primeiros passos");
+    $("passos-sub").innerHTML = txt(PP.subtitulo || "");
+    $("passos-sub").hidden = !PP.subtitulo;
     var chave = "cartilha:" + SLUG + ":passos";
     var feitos = ler(chave, []);
     $("passos").innerHTML = passos.map(function (p, i) {
