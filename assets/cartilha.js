@@ -27,7 +27,12 @@
   function digitos(s) { return String(s || "").replace(/\D/g, ""); }
   function dois(n) { return (n < 10 ? "0" : "") + n; }
   function icone(nome) { return '<svg class="ic" aria-hidden="true"><use href="#i-' + esc(nome) + '"></use></svg>'; }
-  function linkTel(tel) { return pendente(tel) ? null : "tel:+55" + digitos(tel); }
+  // números que começam com 0 (0800, 0300) são discados como estão; os outros ganham +55 (Brasil)
+  function linkTel(tel) {
+    if (pendente(tel)) return null;
+    var d = digitos(tel);
+    return d.charAt(0) === "0" ? "tel:" + d : "tel:+55" + d;
+  }
   function linkWhats(w) { return pendente(w) ? null : /^https?:/.test(w) ? w : "https://wa.me/55" + digitos(w); }
   function tamanho(bytes) {
     if (!bytes) return "";
