@@ -49,7 +49,7 @@
   if (implantando) {
     $("implantacao").hidden = false;
     $("implantacao-texto").innerHTML = icone("triangle-alert") +
-      "<p><strong>Cartilha em implantação.</strong> Estamos completando as informações. " +
+      "<p><strong>Guia em implantação.</strong> Estamos completando as informações. " +
       'Os trechos destacados assim, <mark class="ph">[em vermelho]</mark>, ainda serão preenchidos e devem ser desconsiderados.</p>';
   }
 
