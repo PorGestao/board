@@ -199,7 +199,18 @@
       (b ? '<div class="botoes">' + b + "</div>" : "") + "</article>";
   }).join("");
 
+  // números de emergência: só texto (sem link de ligação)
   $("emergencia").innerHTML = (C.emergencia || []).map(function (e) {
-    return '<a href="tel:' + digitos(e.numero) + '"><strong>' + esc(e.numero) + "</strong><span>" + esc(e.nome) + "</span></a>";
+    return '<div class="emergencia-item"><strong>' + esc(e.numero) + "</strong><span>" + esc(e.nome) + "</span></div>";
   }).join("");
+
+  // emergências do prédio (ex.: plantão do elevador, síndico): metade da largura cada
+  var ep = C.emergenciaPredio || [];
+  if (ep.length) {
+    $("emergencia-predio").hidden = false;
+    $("emergencia-predio").innerHTML = ep.map(function (e) {
+      return '<div class="emergencia-item"><span class="rotulo">' + txt(e.nome) + "</span><strong>" + txt(e.numero) + "</strong>" +
+        (e.detalhe ? "<span>" + txt(e.detalhe) + "</span>" : "") + "</div>";
+    }).join("");
+  }
 })();
