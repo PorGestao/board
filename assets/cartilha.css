@@ -87,6 +87,18 @@ img, svg { display: block; }
   text-transform: none;
 }
 
+/* ---------- Aviso "em implantação" ---------- */
+.implantacao {
+  background: #fff4d6;
+  color: #3d2f0a;
+  border-bottom: 1px solid #e9c46a;
+  font-size: 14.5px; line-height: 1.5;
+}
+.implantacao .wrap { display: flex; align-items: flex-start; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+.implantacao .ic { width: 20px; height: 20px; flex: none; margin-top: 1px; color: #9a6700; }
+.implantacao strong { font-weight: 700; }
+.implantacao mark.ph { background: #ffe1dc; color: #9b1c1c; }
+
 /* =====================================================================
    CAPA
    ===================================================================== */

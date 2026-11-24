@@ -42,6 +42,17 @@
   function guardar(chave, valor) { try { localStorage.setItem(chave, JSON.stringify(valor)); } catch (e) {} }
   function ler(chave, padrao) { try { return JSON.parse(localStorage.getItem(chave)) || padrao; } catch (e) { return padrao; } }
 
+  // ---------- aviso "em implantação" ----------
+  // aparece sozinho enquanto houver [colchetes]; some quando tudo estiver preenchido.
+  // Para forçar: emImplantacao: true (sempre mostra) ou false (nunca mostra) no dados.js.
+  var implantando = C.emImplantacao != null ? C.emImplantacao : C.pendentes > 0;
+  if (implantando) {
+    $("implantacao").hidden = false;
+    $("implantacao-texto").innerHTML = icone("triangle-alert") +
+      "<p><strong>Cartilha em implantação.</strong> Estamos completando as informações. " +
+      'Os trechos destacados assim, <mark class="ph">[em vermelho]</mark>, ainda serão preenchidos e devem ser desconsiderados.</p>';
+  }
+
   // ---------- capa ----------
   $("saudacao").textContent = C.saudacao || "Boas-vindas";
   $("chamada").innerHTML = txt(C.chamada || C.predio);
