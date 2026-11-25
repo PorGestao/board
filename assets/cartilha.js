@@ -150,11 +150,45 @@
     var doc = e.target.closest("[data-arquivo]");
     if (doc && doc.getAttribute("href") === "#") {
       var arq = ARQ[doc.getAttribute("data-arquivo")];
+      if (arq.remoto) { e.preventDefault(); abrirRemoto(doc, arq); return; }
       var bin = atob(arq.base64), bytes = new Uint8Array(bin.length);
       for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
       doc.href = URL.createObjectURL(new Blob([bytes], { type: arq.tipo }));
     }
   });
+
+  // PDF das gavetas: baixa o arquivo criptografado (docs/xxxx.bin), descriptografa no celular e abre.
+  // Formato do arquivo: 12 bytes de IV + conteúdo cifrado (AES-256-GCM) + 16 bytes de verificação.
+  function base64ParaBytes(b64) {
+    var bin = atob(b64), bytes = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return bytes;
+  }
+  function abrirRemoto(doc, arq) {
+    var aviso = doc.querySelector("small");
+    var original = aviso ? aviso.textContent : "";
+    if (aviso) aviso.textContent = "Abrindo…";
+    // a janela é aberta JÁ, no clique; abrir depois do download seria bloqueado como pop-up
+    var janela = window.open("", "_blank");
+    fetch(arq.remoto, { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.arrayBuffer(); })
+      .then(function (buf) {
+        var tudo = new Uint8Array(buf);
+        return crypto.subtle.importKey("raw", base64ParaBytes(window.CHAVE_ARQUIVOS), "AES-GCM", false, ["decrypt"])
+          .then(function (chave) {
+            return crypto.subtle.decrypt({ name: "AES-GCM", iv: tudo.slice(0, 12) }, chave, tudo.slice(12));
+          });
+      })
+      .then(function (pdf) {
+        var url = URL.createObjectURL(new Blob([pdf], { type: arq.tipo }));
+        if (janela) janela.location.href = url; else location.href = url;
+        if (aviso) aviso.textContent = original;
+      })
+      .catch(function () {
+        if (janela) janela.close();
+        if (aviso) aviso.textContent = "Não foi possível abrir. Tente de novo.";
+      });
+  }
   if (location.hash && porId[location.hash.slice(1)]) abrir(location.hash.slice(1));
 
   // ---------- busca ----------
