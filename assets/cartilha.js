@@ -75,10 +75,17 @@
   $("acoes").innerHTML = a;
 
   // ---------- guia (índice + folha de detalhe) ----------
+  // todos os links da seção: os soltos + os de cada gaveta
+  function todosLinks(s) {
+    var l = (s.links || []).slice();
+    (s.grupos || []).forEach(function (g) { l = l.concat(g.links || []); });
+    return l;
+  }
   function contagem(s) {
-    var n = (s.itens || []).length, d = (s.links || []).length, p = [];
+    var n = (s.itens || []).length, d = todosLinks(s).length, p = [];
     if (n) p.push(n + (n === 1 ? " orientação" : " orientações"));
-    if (d) p.push(d + (d === 1 ? " link" : " links"));
+    var nome = s.grupos ? ["documento", "documentos"] : ["link", "links"];   // seção com gavetas = documentos
+    if (d) p.push(d + " " + (d === 1 ? nome[0] : nome[1]));
     return p.join(" · ");
   }
   function itemHTML(s, trecho) {
@@ -117,6 +124,16 @@
     if (s.itens && s.itens.length) corpo += '<ol class="itens">' + s.itens.map(function (i) { return "<li>" + txt(i) + "</li>"; }).join("") + "</ol>";
     if (s.aviso) corpo += '<div class="aviso">' + icone("triangle-alert") + "<div>" + txt(s.aviso) + "</div></div>";
     if (s.links && s.links.length) corpo += '<div class="links">' + s.links.map(linkDoc).join("") + "</div>";
+    // gavetas: menus que abrem e fecham (<details>), cada uma com sua lista de links
+    if (s.grupos && s.grupos.length) {
+      corpo += '<div class="gavetas">' + s.grupos.map(function (g) {
+        var lista = g.links || [];
+        return '<details class="gaveta"><summary>' + icone("folder-open") + "<span>" + txt(g.titulo) + "</span>" +
+          '<span class="gaveta-qtd">' + lista.length + "</span>" + icone("chevron-down") + "</summary>" +
+          (lista.length ? '<div class="links">' + lista.map(linkDoc).join("") + "</div>"
+                        : '<p class="gaveta-vazia">Nenhum documento por enquanto.</p>') + "</details>";
+      }).join("") + "</div>";
+    }
     $("folha-corpo").innerHTML = corpo;
     $("folha-corpo").scrollTop = 0;
     if (!folha.open) folha.showModal();
@@ -146,7 +163,7 @@
     if (!q) { desenhar(todas); return; }
     var achados = [];
     secoes.forEach(function (s) {
-      var textos = [s.titulo].concat(s.itens || [], s.aviso ? [s.aviso] : [], (s.links || []).map(function (l) { return l.texto; }));
+      var textos = [s.titulo].concat(s.itens || [], s.aviso ? [s.aviso] : [], todosLinks(s).map(function (l) { return l.texto; }), (s.grupos || []).map(function (g) { return g.titulo; }));
       var trecho = null, achou = false;
       textos.forEach(function (t, n) {
         if (semAcento(t).indexOf(q) === -1) return;

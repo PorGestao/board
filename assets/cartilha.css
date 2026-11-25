@@ -474,6 +474,25 @@ img, svg { display: block; }
 .link-doc.pendente { cursor: default; }
 .link-doc.pendente:hover { transform: none; border-color: var(--linha); }
 
+/* gavetas de documentos (menus que abrem e fecham) */
+.gavetas { display: grid; gap: 10px; margin-top: 18px; }
+.gaveta { border: 1px solid var(--linha); border-radius: var(--r-p); background: var(--cartao); overflow: hidden; }
+.gaveta summary {
+  display: grid; grid-template-columns: 22px 1fr auto 20px; align-items: center; gap: 12px;
+  min-height: 56px; padding: 10px 16px;
+  cursor: pointer; list-style: none; font-weight: 600;
+  transition: background .2s;
+}
+.gaveta summary::-webkit-details-marker { display: none; }
+.gaveta summary:hover { background: var(--papel); }
+.gaveta summary .ic { color: var(--acento-texto); }
+.gaveta summary > .ic:last-child { color: var(--suave); transition: transform .2s; }
+.gaveta[open] summary > .ic:last-child { transform: rotate(180deg); }
+.gaveta[open] summary { border-bottom: 1px solid var(--linha); }
+.gaveta-qtd { min-width: 28px; padding: 2px 8px; border-radius: 999px; background: var(--papel-2); font-size: 13px; text-align: center; color: var(--suave); }
+.gaveta .links { margin: 0; padding: 12px; }
+.gaveta-vazia { margin: 0; padding: 14px 16px; color: var(--suave); font-size: 15px; }
+
 /* campo ainda não preenchido: [colchetes] */
 mark.ph { background: #ffe1dc; color: #9b1c1c; border-radius: 3px; padding: 0 3px; }
 .capa mark.ph, .escuro mark.ph, .folha-cab mark.ph { background: rgba(255, 140, 120, .25); color: #ffd2c9; }
