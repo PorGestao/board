@@ -229,7 +229,8 @@
     var feitos = ler(chave, []);
     $("passos").innerHTML = passos.map(function (p, i) {
       var ver = p.secao && porId[p.secao] ? '<button type="button" class="passo-ver" data-abrir="' + esc(p.secao) + '">Como fazer ' + icone("arrow-right") + "</button>" : "";
-      return '<li class="passo"><label><span><span class="passo-num">' + dois(i + 1) + '</span><span class="passo-texto">' + txt(p.texto) + "</span></span>" +
+      return '<li class="passo"><label><span><span class="passo-num">' + dois(i + 1) + '</span><span class="passo-texto">' + txt(p.texto) + "</span>" +
+        (p.detalhe ? '<span class="passo-detalhe">' + txt(p.detalhe) + "</span>" : "") + "</span>" +
         '<input type="checkbox" data-passo="' + i + '"' + (feitos.indexOf(i) !== -1 ? " checked" : "") + ' aria-label="' + esc(String(p.texto).replace(/[*\[\]]/g, "")) + '">' +
         '<span class="caixa" aria-hidden="true">' + icone("check") + "</span></label>" + ver + "</li>";
     }).join("");

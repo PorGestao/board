@@ -274,6 +274,7 @@ img, svg { display: block; }
 .passo input { position: absolute; opacity: 0; pointer-events: none; }
 .passo-num { font: 300 13px/1 var(--fonte-texto); letter-spacing: .16em; color: var(--acento-texto); }
 .passo-texto { display: block; margin-top: 10px; font-weight: 500; font-size: 17px; line-height: 1.4; }
+.passo-detalhe { display: block; margin-top: 6px; font-size: 15px; line-height: 1.45; color: var(--suave); }
 .caixa {
   width: 30px; height: 30px; border-radius: 50%;
   display: grid; place-items: center;
